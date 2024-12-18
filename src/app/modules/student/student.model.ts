@@ -163,15 +163,34 @@ studentSchema.pre('find', function (next) {
   next();
 });
 
-studentSchema.pre('findOne', function (next) {
-  this.find({ isDeleted: { $ne: true } });
-  next();
-});
+// studentSchema.pre('findOne', async function (next) {
+//   const query = this.getQuery();
 
-studentSchema.pre('aggregate', function (next) {
-  this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
-  next();
-});
+//   const isStudentExists = await StudentModel.findOne(query);
+
+//   if (!isStudentExists) {
+//     throw new Error('Student does not exist');
+//   }
+
+//   next();
+// });
+
+// studentSchema.pre('updateOne', async function (next) {
+//   const query = this.getQuery();
+
+//   const isStudentExists = await StudentModel.findOne(query);
+
+//   if (!isStudentExists) {
+//     throw new Error('Student does not exist');
+//   }
+
+//   next();
+// });
+
+// studentSchema.pre('aggregate', function (next) {
+//   this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
+//   next();
+// });
 
 //creating a custom static method
 studentSchema.statics.isUserExists = async function (id: string) {

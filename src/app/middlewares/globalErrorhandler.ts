@@ -5,13 +5,27 @@
 import { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
 
+export class AppError extends Error {
+  public statusCode: number;
+
+  constructor(statusCode: number, message: string, stack = '') {
+    super(message);
+
+    this.statusCode = statusCode;
+    if (stack) {
+      this.stack = stack;
+    } else {
+      Error.captureStackTrace(this, this.constructor);
+    }
+  }
+}
 const globalErrorHandler = (
   err: any,
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
-  const statusCode = 500;
+  const statusCode = err.statusCode || 500;
   const message =
     err instanceof z.ZodError
       ? err.errors
