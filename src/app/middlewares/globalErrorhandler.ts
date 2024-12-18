@@ -26,6 +26,7 @@ const globalErrorHandler = (
   next: NextFunction,
 ) => {
   const statusCode = err.statusCode || 500;
+  const stack = process.env.NODE_ENV === 'production' ? undefined : err.stack;
   const message =
     err instanceof z.ZodError
       ? err.errors
@@ -35,6 +36,7 @@ const globalErrorHandler = (
     success: false,
     message,
     error: err,
+    stack,
   });
 };
 

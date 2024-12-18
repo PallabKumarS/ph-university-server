@@ -1,10 +1,10 @@
 // year semesterCode 4digit number
 import { TAcademicSemester } from '../academicSemester/academicSemester.interface';
-import { User } from './user.model';
+import { UserModel } from './user.model';
 
 //searching the db for the last student id
 const findLastStudentId = async () => {
-  const lastStudent = await User.findOne(
+  const lastStudent = await UserModel.findOne(
     {
       role: 'student',
     },
@@ -23,7 +23,7 @@ const findLastStudentId = async () => {
 };
 
 const existingId = async (id: string) => {
-  const lastUser = await User.findOne(
+  const lastUser = await UserModel.findOne(
     {
       id: id,
     },

@@ -4,7 +4,7 @@ import { TStudent } from '../student/student.interface';
 import { StudentModel } from '../student/student.model';
 import { AcademicSemesterModel } from './../academicSemester/academicSemester.model';
 import { TUser } from './user.interface';
-import { User } from './user.model';
+import { UserModel } from './user.model';
 import { generateStudentId } from './user.utils';
 import { AppError } from '../../middlewares/globalErrorhandler';
 import httpStatus from 'http-status';
@@ -39,7 +39,7 @@ const createStudentIntoDB = async (
     userData.id = await generateStudentId(admissionSemester);
 
     // create a user (first transaction)
-    const newUser = await User.create([userData], { session });
+    const newUser = await UserModel.create([userData], { session });
 
     // create a student
     if (!newUser.length) {
@@ -58,12 +58,12 @@ const createStudentIntoDB = async (
     }
 
     await session.commitTransaction();
-    session.endSession();
+    await session.endSession();
 
     return newStudent[0];
   } catch (err) {
     await session.abortTransaction();
-    session.endSession();
+    await session.endSession();
     throw err; // Re-throw the error to ensure it is handled appropriately
   }
 };

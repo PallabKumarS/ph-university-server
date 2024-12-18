@@ -6,6 +6,8 @@ import {
   TStudent,
   TUserName,
 } from './student.interface';
+import { AppError } from '../../middlewares/globalErrorhandler';
+import httpStatus from 'http-status';
 
 const userNameSchema = new Schema<TUserName>({
   firstName: {
@@ -159,38 +161,29 @@ studentSchema.virtual('fullName').get(function () {
 
 // Query Middleware
 studentSchema.pre('find', function (next) {
-  this.find({ isDeleted: { $ne: true } });
+  this.find({ isDeleted: false });
   next();
 });
 
-// studentSchema.pre('findOne', async function (next) {
-//   const query = this.getQuery();
+studentSchema.pre('findOneAndUpdate', async function (next) {
+  const query = this.getQuery();
 
-//   const isStudentExists = await StudentModel.findOne(query);
+  const isStudentExists = await StudentModel.findOne({
+    _id: query._id,
+    isDeleted: false,
+  });
 
-//   if (!isStudentExists) {
-//     throw new Error('Student does not exist');
-//   }
+  if (!isStudentExists) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Student does not exist');
+  }
 
-//   next();
-// });
+  next();
+});
 
-// studentSchema.pre('updateOne', async function (next) {
-//   const query = this.getQuery();
-
-//   const isStudentExists = await StudentModel.findOne(query);
-
-//   if (!isStudentExists) {
-//     throw new Error('Student does not exist');
-//   }
-
-//   next();
-// });
-
-// studentSchema.pre('aggregate', function (next) {
-//   this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
-//   next();
-// });
+studentSchema.pre('aggregate', function (next) {
+  this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
+  next();
+});
 
 //creating a custom static method
 studentSchema.statics.isUserExists = async function (id: string) {
