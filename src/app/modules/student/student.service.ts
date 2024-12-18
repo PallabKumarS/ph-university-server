@@ -7,14 +7,14 @@ import { TStudent } from './student.interface';
 
 const getAllStudentsFromDB = async () => {
   const result = await StudentModel.find()
-    .populate('admissionSemester')
+    .populate('academicSemester')
     .populate('user');
   return result;
 };
 
 const getSingleStudentFromDB = async (id: string) => {
   const result = await StudentModel.findOne({ _id: id, isDeleted: false })
-    .populate('admissionSemester')
+    .populate('academicSemester')
     .populate('user');
 
   if (!result) {
@@ -42,7 +42,9 @@ const deleteStudentFromDB = async (id: string) => {
       { id: deletedStudent.id },
       { isDeleted: true },
       { new: true, session },
-    );
+    )
+      .populate('academicSemester')
+      .populate('user');
 
     if (!deletedUser) {
       throw new AppError(httpStatus.BAD_REQUEST, 'Failed to delete student');
@@ -60,11 +62,36 @@ const deleteStudentFromDB = async (id: string) => {
 };
 
 const updateStudentIntoDB = async (id: string, payload: Partial<TStudent>) => {
+  const { name, guardian, localGuardian, ...remainingData } = payload;
+
+  const modifiedStudentData: Record<string, unknown> = {
+    ...remainingData,
+  };
+
+  if (name && Object.keys(name).length > 0) {
+    for (const [key, value] of Object.entries(name)) {
+      modifiedStudentData[`name.${key}`] = value;
+    }
+  }
+
+  if (localGuardian && Object.keys(localGuardian).length > 0) {
+    for (const [key, value] of Object.entries(localGuardian)) {
+      modifiedStudentData[`localGuardian.${key}`] = value;
+    }
+  }
+
+  if (guardian && Object.keys(guardian).length > 0) {
+    for (const [key, value] of Object.entries(guardian)) {
+      modifiedStudentData[`guardian.${key}`] = value;
+    }
+  }
+
   const updatedStudent = await StudentModel.findOneAndUpdate(
     { _id: id },
-    payload,
+    modifiedStudentData,
     {
       new: true,
+      runValidators: true,
     },
   );
   return updatedStudent;

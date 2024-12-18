@@ -23,11 +23,11 @@ const createStudentIntoDB = async (
   userData.role = 'student';
 
   // find academic semester info
-  const admissionSemester = await AcademicSemesterModel.findById(
-    payload.admissionSemester,
+  const academicSemester = await AcademicSemesterModel.findById(
+    payload.academicSemester,
   );
 
-  if (!admissionSemester) {
+  if (!academicSemester) {
     throw new Error('Admission semester not found');
   }
 
@@ -36,7 +36,7 @@ const createStudentIntoDB = async (
 
   try {
     // set generated id
-    userData.id = await generateStudentId(admissionSemester);
+    userData.id = await generateStudentId(academicSemester);
 
     // create a user (first transaction)
     const newUser = await UserModel.create([userData], { session });
