@@ -1,7 +1,7 @@
 import httpStatus from 'http-status';
-import { AppError } from '../../middlewares/globalErrorhandler';
 import { TAcademicDepartment } from './academicDepartment.interface';
 import { AcademicDepartmentModel } from './academicDepartment.model';
+import { AppError } from '../../errors/AppError';
 
 const createAcademicDepartmentIntoDB = async (payload: TAcademicDepartment) => {
   const result = await AcademicDepartmentModel.create(payload);

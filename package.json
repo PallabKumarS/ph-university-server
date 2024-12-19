@@ -24,6 +24,7 @@
     "http-status": "^1.7.3",
     "lint-staged": "^15.1.0",
     "mongoose": "^8.0.1",
+    "openai": "^4.77.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
