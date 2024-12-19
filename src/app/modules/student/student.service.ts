@@ -4,83 +4,21 @@ import mongoose from 'mongoose';
 import { UserModel } from '../user/user.model';
 import { TStudent } from './student.interface';
 import { AppError } from '../../errors/AppError';
+import QueryBuilder from '../../builder/QueryBuilder';
+import { studentSearchableFields } from './student.constant';
 
 const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
-  // set query
-  let searchTerm = '';
-  if (query?.searchTerm) {
-    searchTerm = query?.searchTerm as string;
-  }
+  // finding students from database
+  const studentQuery = new QueryBuilder(StudentModel.find(), query)
+    .search(studentSearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
 
-  const queryObj = { ...query };
+  const result = await studentQuery.modelQuery;
 
-  // searching here for student
-  const searchQuery = StudentModel.find({
-    $or: [
-      'email',
-      'name.firstName',
-      'name.middleName',
-      'name.lastName',
-      'presentAddress',
-      'permanentAddress',
-    ].map((field) => ({
-      [field]: { $regex: searchTerm, $options: 'i' },
-    })),
-  });
-
-  // filtering here for student
-  const excludeFields = ['searchTerm', 'page', 'limit', 'sort', 'fields'];
-  excludeFields.forEach((el) => delete queryObj[el]);
-
-  const filterQuery = searchQuery
-    .find(queryObj)
-    .populate('academicSemester')
-    .populate('user')
-    .populate('academicDepartment')
-    .populate({
-      path: 'academicDepartment',
-      populate: {
-        path: 'academicFaculty',
-      },
-    });
-
-  // sorting here for student
-  let sort = '-createdAt';
-
-  if (query?.sort) {
-    sort = query?.sort as string;
-  }
-
-  const sortQuery = filterQuery.sort(sort);
-
-  // limiting and paging the result here
-  let page = 1;
-  let limit = 2;
-  let skip = 0;
-
-  if (query?.limit) {
-    limit = Number(query?.limit as string);
-  }
-
-  if (query?.page) {
-    page = Number(query?.page as string);
-    skip = (page - 1) * limit;
-  }
-
-  const paginateQuery = sortQuery.skip(skip);
-
-  const limitQuery = paginateQuery.limit(limit);
-
-  // field limiting here for student
-  let fields = '-__v';
-
-  if (query?.fields) {
-    fields = (query?.fields as string).replace(/,/g, ' ');
-  }
-
-  const fieldQuery = await limitQuery.select(fields);
-
-  return fieldQuery;
+  return result;
 };
 
 const getSingleStudentFromDB = async (id: string) => {

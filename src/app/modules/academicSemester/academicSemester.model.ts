@@ -5,8 +5,8 @@ import {
   Months,
 } from './academicSemester.constant';
 import { TAcademicSemester } from './academicSemester.interface';
-import { AppError } from '../../middlewares/globalErrorhandler';
 import httpStatus from 'http-status';
+import { AppError } from '../../errors/AppError';
 
 const academicSemesterSchema = new Schema<TAcademicSemester>(
   {
