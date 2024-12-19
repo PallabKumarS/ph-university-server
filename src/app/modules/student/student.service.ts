@@ -8,14 +8,28 @@ import { TStudent } from './student.interface';
 const getAllStudentsFromDB = async () => {
   const result = await StudentModel.find()
     .populate('academicSemester')
-    .populate('user');
+    .populate('user')
+    .populate('academicDepartment')
+    .populate({
+      path: 'academicDepartment',
+      populate: {
+        path: 'academicFaculty',
+      },
+    });
   return result;
 };
 
 const getSingleStudentFromDB = async (id: string) => {
   const result = await StudentModel.findOne({ _id: id, isDeleted: false })
     .populate('academicSemester')
-    .populate('user');
+    .populate('user')
+    .populate('academicDepartment')
+    .populate({
+      path: 'academicDepartment',
+      populate: {
+        path: 'academicFaculty',
+      },
+    });
 
   if (!result) {
     throw new AppError(httpStatus.NOT_FOUND, 'Student does not exist');
@@ -44,7 +58,14 @@ const deleteStudentFromDB = async (id: string) => {
       { new: true, session },
     )
       .populate('academicSemester')
-      .populate('user');
+      .populate('user')
+      .populate('academicDepartment')
+      .populate({
+        path: 'academicDepartment',
+        populate: {
+          path: 'academicFaculty',
+        },
+      });
 
     if (!deletedUser) {
       throw new AppError(httpStatus.BAD_REQUEST, 'Failed to delete student');
@@ -93,7 +114,16 @@ const updateStudentIntoDB = async (id: string, payload: Partial<TStudent>) => {
       new: true,
       runValidators: true,
     },
-  );
+  )
+    .populate('academicSemester')
+    .populate('user')
+    .populate('academicDepartment')
+    .populate({
+      path: 'academicDepartment',
+      populate: {
+        path: 'academicFaculty',
+      },
+    });
   return updatedStudent;
 };
 

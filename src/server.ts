@@ -4,9 +4,10 @@ import config from './app/config';
 
 async function main() {
   try {
+    // connect to database
     console.log('Connecting to database...');
     await mongoose.connect(config.database_url as string, {
-      dbName: config.dbName,
+      dbName: 'universityDB',
     });
     console.log('Connected to database');
 
@@ -17,5 +18,4 @@ async function main() {
     console.log(err);
   }
 }
-
 main();
