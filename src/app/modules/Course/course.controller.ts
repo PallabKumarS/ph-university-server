@@ -63,11 +63,11 @@ const deleteCourse = catchAsync(async (req, res) => {
 
 const assignTeachersWithCourse = catchAsync(async (req, res) => {
   const { courseId } = req.params;
-  const { teacherData } = req.body;
+  const { teachers } = req.body;
 
   const result = await CourseServices.assignTeachersWithCourseIntoDB(
     courseId,
-    teacherData,
+    teachers,
   );
 
   sendResponse(res, {
@@ -80,11 +80,11 @@ const assignTeachersWithCourse = catchAsync(async (req, res) => {
 
 const removeTeachersFromCourse = catchAsync(async (req, res) => {
   const { courseId } = req.params;
-  const { teacherData } = req.body;
+  const { teachers } = req.body;
 
   const result = await CourseServices.removeTeachersFromCourseFromDB(
     courseId,
-    teacherData,
+    teachers,
   );
 
   sendResponse(res, {
