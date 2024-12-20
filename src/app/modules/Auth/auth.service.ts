@@ -2,14 +2,14 @@ import bcrypt from 'bcrypt';
 import httpStatus from 'http-status';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import config from '../../config';
-import AppError from '../../errors/AppError';
-import { User } from '../user/user.model';
 import { TLoginUser } from './auth.interface';
 import { createToken } from './auth.utils';
+import { UserModel } from '../user/user.model';
+import { AppError } from '../../errors/AppError';
 
 const loginUser = async (payload: TLoginUser) => {
   // checking if the user is exist
-  const user = await User.isUserExistsByCustomId(payload.id);
+  const user = await UserModel.isUserExistsByCustomId(payload.id);
 
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, 'This user is not found !');
@@ -32,11 +32,11 @@ const loginUser = async (payload: TLoginUser) => {
 
   //checking if the password is correct
 
-  if (!(await User.isPasswordMatched(payload?.password, user?.password)))
+  if (!(await UserModel.isPasswordMatched(payload?.password, user?.password))) {
     throw new AppError(httpStatus.FORBIDDEN, 'Password do not matched');
+  }
 
   //create token and sent to the  client
-
   const jwtPayload = {
     userId: user.id,
     role: user.role,
@@ -66,7 +66,7 @@ const changePassword = async (
   payload: { oldPassword: string; newPassword: string },
 ) => {
   // checking if the user is exist
-  const user = await User.isUserExistsByCustomId(userData.userId);
+  const user = await UserModel.isUserExistsByCustomId(userData.userId);
 
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, 'This user is not found !');
@@ -89,8 +89,11 @@ const changePassword = async (
 
   //checking if the password is correct
 
-  if (!(await User.isPasswordMatched(payload.oldPassword, user?.password)))
-    throw new AppError(httpStatus.FORBIDDEN, 'Password do not matched');
+  if (
+    !(await UserModel.isPasswordMatched(payload.oldPassword, user?.password))
+  ) {
+    throw new AppError(httpStatus.FORBIDDEN, 'Password do not match');
+  }
 
   //hash new password
   const newHashedPassword = await bcrypt.hash(
@@ -98,7 +101,7 @@ const changePassword = async (
     Number(config.bcrypt_salt_rounds),
   );
 
-  await User.findOneAndUpdate(
+  await UserModel.findOneAndUpdate(
     {
       id: userData.userId,
       role: userData.role,
@@ -123,7 +126,7 @@ const refreshToken = async (token: string) => {
   const { userId, iat } = decoded;
 
   // checking if the user is exist
-  const user = await User.isUserExistsByCustomId(userId);
+  const user = await UserModel.isUserExistsByCustomId(userId);
 
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, 'This user is not found !');
@@ -144,7 +147,10 @@ const refreshToken = async (token: string) => {
 
   if (
     user.passwordChangedAt &&
-    User.isJWTIssuedBeforePasswordChanged(user.passwordChangedAt, iat as number)
+    UserModel.isJWTIssuedBeforePasswordChanged(
+      user.passwordChangedAt,
+      iat as number,
+    )
   ) {
     throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorized !');
   }

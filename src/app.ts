@@ -7,12 +7,17 @@ import express, { Application, Request, Response } from 'express';
 import globalErrorHandler from './app/middlewares/globalErrorhandler';
 import notFound from './app/middlewares/notFound';
 import router from './app/routes';
+import cookieParser from 'cookie-parser';
+import config from './app/config';
 
 const app: Application = express();
 
 //parsers
+app.use(cookieParser());
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({ origin: [config.local_client as string, config.client as string] }),
+);
 
 // application routes
 app.use('/api/v1', router);
