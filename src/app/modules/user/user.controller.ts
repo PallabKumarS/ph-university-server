@@ -7,7 +7,11 @@ import { UserServices } from './user.service';
 const createStudent = catchAsync(async (req, res) => {
   const { password, studentData } = req.body;
 
-  const result = await UserServices.createStudentIntoDB(password, studentData);
+  const result = await UserServices.createStudentIntoDB(
+    req.file,
+    password,
+    studentData,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -21,7 +25,11 @@ const createStudent = catchAsync(async (req, res) => {
 const createTeacher = catchAsync(async (req, res) => {
   const { password, teacherData } = req.body;
 
-  const result = await UserServices.createTeacherIntoDB(password, teacherData);
+  const result = await UserServices.createTeacherIntoDB(
+    req.file,
+    password,
+    teacherData,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -35,7 +43,11 @@ const createTeacher = catchAsync(async (req, res) => {
 const createAdmin = catchAsync(async (req, res) => {
   const { password, adminData } = req.body;
 
-  const result = await UserServices.createStudentIntoDB(password, adminData);
+  const result = await UserServices.createStudentIntoDB(
+    req.file,
+    password,
+    adminData,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
