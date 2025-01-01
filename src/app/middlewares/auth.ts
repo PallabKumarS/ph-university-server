@@ -6,6 +6,7 @@ import catchAsync from '../utils/catchAsync';
 import { AppError } from '../errors/AppError';
 import { UserModel } from '../modules/user/user.model';
 import { verifyToken } from '../modules/Auth/auth.utils';
+import { JwtPayload } from 'jsonwebtoken';
 
 const auth = (...requiredRoles: TUserRole[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -58,7 +59,7 @@ const auth = (...requiredRoles: TUserRole[]) => {
       );
     }
 
-    req.user = decoded;
+    req.user = decoded as JwtPayload & { role: string };
     next();
   });
 };

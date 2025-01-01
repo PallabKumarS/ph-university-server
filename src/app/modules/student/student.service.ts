@@ -7,6 +7,7 @@ import { AppError } from '../../errors/AppError';
 import QueryBuilder from '../../builder/QueryBuilder';
 import { studentSearchableFields } from './student.constant';
 
+// get all student from db
 const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
   // finding students from database
   const studentQuery = new QueryBuilder(StudentModel.find(), query)
@@ -17,10 +18,12 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
     .fields();
 
   const result = await studentQuery.modelQuery;
+  const meta = await studentQuery.countTotal();
 
-  return result;
+  return { result, meta };
 };
 
+// get single student from db
 const getSingleStudentFromDB = async (id: string) => {
   const result = await StudentModel.findOne({ _id: id, isDeleted: false })
     .populate('academicSemester')
@@ -39,6 +42,7 @@ const getSingleStudentFromDB = async (id: string) => {
   return result;
 };
 
+// delete student from db
 const deleteStudentFromDB = async (id: string) => {
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -84,6 +88,7 @@ const deleteStudentFromDB = async (id: string) => {
   }
 };
 
+// update student into db
 const updateStudentIntoDB = async (id: string, payload: Partial<TStudent>) => {
   const { name, guardian, localGuardian, ...remainingData } = payload;
 

@@ -14,8 +14,7 @@ const createCourseIntoDB = async (payload: TCourse) => {
 
 const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
   const courseQuery = new QueryBuilder(
-    CourseModel.find(),
-    // .populate('preRequisiteCourses.course'),
+    CourseModel.find().populate('preRequisiteCourses.course'),
     query,
   )
     .search(CourseSearchableFields)
@@ -25,7 +24,9 @@ const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
     .fields();
 
   const result = await courseQuery.modelQuery;
-  return result;
+  const meta = await courseQuery.countTotal();
+
+  return { result, meta };
 };
 
 const getSingleCourseFromDB = async (id: string) => {

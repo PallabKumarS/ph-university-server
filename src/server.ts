@@ -23,8 +23,8 @@ async function main() {
 }
 main();
 
-process.on('unhandledRejection', () => {
-  console.log('Unhandled Rejection detected, closing server...');
+process.on('unhandledRejection', (err) => {
+  console.log('Unhandled Rejection detected, closing server...', err);
   if (server) {
     server.close(() => {
       process.exit(1);
@@ -33,7 +33,7 @@ process.on('unhandledRejection', () => {
   process.exit(1);
 });
 
-process.on('uncaughtException', () => {
-  console.log('Uncaught Exception detected, closing server...');
+process.on('uncaughtException', (err) => {
+  console.log('Uncaught Exception detected, closing server...', err);
   process.exit(1);
 });
