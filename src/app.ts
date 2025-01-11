@@ -16,7 +16,10 @@ const app: Application = express();
 app.use(cookieParser());
 app.use(express.json());
 app.use(
-  cors({ origin: [config.local_client as string, config.client as string] }),
+  cors({
+    origin: [config.local_client as string, config.client as string],
+    credentials: true,
+  }),
 );
 
 // application routes

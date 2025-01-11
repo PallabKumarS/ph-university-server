@@ -10,6 +10,7 @@ import { sendEmail } from '../../utils/sendMail';
 
 const loginUser = async (payload: TLoginUser) => {
   // checking if the user is exist
+
   const user = await UserModel.isUserExistsByCustomId(payload.id);
 
   if (!user) {

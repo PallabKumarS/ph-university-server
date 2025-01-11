@@ -8,7 +8,7 @@ const createStudent = catchAsync(async (req, res) => {
   const { password, studentData } = req.body;
 
   const result = await UserServices.createStudentIntoDB(
-    req.file,
+    // req.file,
     password,
     studentData,
   );
@@ -26,7 +26,7 @@ const createTeacher = catchAsync(async (req, res) => {
   const { password, teacherData } = req.body;
 
   const result = await UserServices.createTeacherIntoDB(
-    req.file,
+    // req.file,
     password,
     teacherData,
   );
@@ -43,8 +43,8 @@ const createTeacher = catchAsync(async (req, res) => {
 const createAdmin = catchAsync(async (req, res) => {
   const { password, adminData } = req.body;
 
-  const result = await UserServices.createStudentIntoDB(
-    req.file,
+  const result = await UserServices.createAdminIntoDB(
+    // req.file,
     password,
     adminData,
   );
