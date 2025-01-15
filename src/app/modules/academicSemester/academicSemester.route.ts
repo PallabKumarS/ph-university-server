@@ -18,7 +18,6 @@ router.post(
 
 router.get(
   '/:semesterId',
-  auth(USER_ROLE.admin),
   AcademicSemesterControllers.getSingleAcademicSemester,
 );
 

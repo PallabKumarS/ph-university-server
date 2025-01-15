@@ -11,5 +11,8 @@ export const createToken = (
 };
 
 export const verifyToken = (token: string, secret: string) => {
-  return jwt.verify(token, secret) as JwtPayload;
+  const newToken = token.includes('Bearer')
+    ? (token.split(' ')[1] as string)
+    : (token as string);
+  return jwt.verify(newToken, secret) as JwtPayload;
 };

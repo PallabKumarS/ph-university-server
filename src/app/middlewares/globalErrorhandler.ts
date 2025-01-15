@@ -9,6 +9,7 @@ import { TErrorSources } from '../errors/error.interface';
 import handleDuplicateError from '../errors/handleDuplicateError';
 import { AppError } from '../errors/AppError';
 import handleValidationError from '../errors/handleValidationError';
+import { TokenExpiredError } from 'jsonwebtoken';
 
 const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   //setting default values
@@ -21,27 +22,52 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     },
   ];
 
+  // jwt error here
+  if (err instanceof TokenExpiredError) {
+    statusCode = 401;
+    message = 'Token Expired';
+    errorSources = [
+      {
+        path: '',
+        message: 'Token Expired',
+      },
+    ];
+  }
+
+  // zod error here
   if (err instanceof ZodError) {
     const simplifiedError = handleZodError(err);
     statusCode = simplifiedError?.statusCode;
     message = simplifiedError?.message;
     errorSources = simplifiedError?.errorSources;
-  } else if (err?.name === 'ValidationError') {
+  }
+
+  // validation error of mongoDB here
+  else if (err?.name === 'ValidationError') {
     const simplifiedError = handleValidationError(err);
     statusCode = simplifiedError?.statusCode;
     message = simplifiedError?.message;
     errorSources = simplifiedError?.errorSources;
-  } else if (err?.name === 'CastError') {
+  }
+
+  // cast error of mongoDB here
+  else if (err?.name === 'CastError') {
     const simplifiedError = handleCastError(err);
     statusCode = simplifiedError?.statusCode;
     message = simplifiedError?.message;
     errorSources = simplifiedError?.errorSources;
-  } else if (err?.code === 11000) {
+  }
+
+  // duplicate error of mongoDB here
+  else if (err?.code === 11000) {
     const simplifiedError = handleDuplicateError(err);
     statusCode = simplifiedError?.statusCode;
     message = simplifiedError?.message;
     errorSources = simplifiedError?.errorSources;
-  } else if (err instanceof AppError) {
+  }
+
+  // custom error here
+  else if (err instanceof AppError) {
     statusCode = err?.statusCode;
     message = err.message;
     errorSources = [
@@ -50,7 +76,10 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
         message: err?.message,
       },
     ];
-  } else if (err instanceof Error) {
+  }
+
+  // default error here
+  else if (err instanceof Error) {
     message = err.message;
     errorSources = [
       {
