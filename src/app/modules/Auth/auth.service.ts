@@ -10,8 +10,7 @@ import { sendEmail } from '../../utils/sendMail';
 
 const loginUser = async (payload: TLoginUser) => {
   // checking if the user is exist
-
-  const user = await UserModel.isUserExistsByCustomId(payload.id);
+  const user = await UserModel.isUserExistsByCustomId(payload.userId);
 
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, 'This user is not found !');
