@@ -33,3 +33,11 @@ export const academicSemesterNameCodeMapper: TAcademicSemesterNameCodeMapper = {
   Spring: '02',
   Summer: '03',
 };
+
+export const searchableSemesterFields: string[] = [
+  'name',
+  'code',
+  'year',
+  'startMonth',
+  'endMonth',
+];

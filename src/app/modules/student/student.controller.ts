@@ -3,6 +3,7 @@ import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { StudentServices } from './student.service';
 
+// get single student controller
 const getSingleStudent = catchAsync(async (req, res) => {
   const { studentId } = req.params;
   const result = await StudentServices.getSingleStudentFromDB(studentId);
@@ -15,19 +16,22 @@ const getSingleStudent = catchAsync(async (req, res) => {
   });
 });
 
+// get all students controller
 const getAllStudents = catchAsync(async (req, res) => {
   const query = req.query;
 
-  const result = await StudentServices.getAllStudentsFromDB(query);
+  const { data, meta } = await StudentServices.getAllStudentsFromDB(query);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Student are retrieved successfully',
-    data: result,
+    data: data,
+    meta: meta,
   });
 });
 
+// delete student controller
 const deleteStudent = catchAsync(async (req, res) => {
   const { studentId } = req.params;
   const result = await StudentServices.deleteStudentFromDB(studentId);
@@ -40,6 +44,7 @@ const deleteStudent = catchAsync(async (req, res) => {
   });
 });
 
+// update student controller
 const updateStudent = catchAsync(async (req, res) => {
   const { studentId } = req.params;
   const { studentData } = req.body;
