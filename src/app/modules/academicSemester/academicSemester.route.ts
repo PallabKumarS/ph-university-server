@@ -30,6 +30,12 @@ router.patch(
   AcademicSemesterControllers.updateAcademicSemester,
 );
 
+router.delete(
+  '/:semesterId',
+  auth(USER_ROLE.admin),
+  AcademicSemesterControllers.deleteAcademicSemester,
+);
+
 router.get(
   '/',
   auth(USER_ROLE.admin),
