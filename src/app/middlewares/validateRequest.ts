@@ -8,6 +8,7 @@ const validateRequest = (schema: AnyZodObject) => {
       body: req.body,
       cookies: req?.cookies,
     });
+
     next();
   });
 };
