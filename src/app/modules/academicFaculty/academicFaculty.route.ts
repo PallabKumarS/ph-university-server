@@ -31,6 +31,12 @@ router.patch(
   AcademicFacultyControllers.updateAcademicFaculty,
 );
 
+router.delete(
+  '/:facultyId',
+  auth(USER_ROLE.admin),
+  AcademicFacultyControllers.deleteAcademicFaculty,
+);
+
 router.get(
   '/',
   auth(USER_ROLE.admin),

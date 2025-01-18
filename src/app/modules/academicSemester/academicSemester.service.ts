@@ -1,4 +1,6 @@
+import httpStatus from 'http-status';
 import QueryBuilder from '../../builder/QueryBuilder';
+import { AppError } from '../../errors/AppError';
 import {
   academicSemesterNameCodeMapper,
   searchableSemesterFields,
@@ -55,6 +57,23 @@ const updateAcademicSemesterIntoDB = async (
     throw new Error('Invalid Semester Code');
   }
 
+  // checking if semester exist or not
+  const isSemesterExists = await AcademicSemesterModel.findById(id);
+  if (!isSemesterExists) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Semester not found !');
+  }
+
+  // checking for duplicate semester
+  const isDuplicateSemester = await AcademicSemesterModel.findOne({
+    year: payload.year,
+    name: payload.name,
+    _id: { $ne: id },
+  });
+
+  if (isDuplicateSemester) {
+    throw new AppError(httpStatus.NOT_ACCEPTABLE, 'Semester already exists !');
+  }
+
   const result = await AcademicSemesterModel.findOneAndUpdate(
     { _id: id },
     payload,
@@ -67,6 +86,12 @@ const updateAcademicSemesterIntoDB = async (
 
 // delete semester service
 const deleteAcademicSemesterFromDB = async (id: string) => {
+  // checking if semester exist or not
+  const isSemesterExists = await AcademicSemesterModel.findById(id);
+  if (!isSemesterExists) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Semester not found !');
+  }
+
   const result = await AcademicSemesterModel.findByIdAndDelete(id);
   return result;
 };
