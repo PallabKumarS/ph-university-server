@@ -63,6 +63,20 @@ const updateAcademicSemesterIntoDB = async (
     throw new AppError(httpStatus.NOT_FOUND, 'Semester not found !');
   }
 
+  // checking for same update
+  if (
+    payload.name === isSemesterExists.name &&
+    payload.code === isSemesterExists.code &&
+    payload.year === isSemesterExists.year &&
+    payload.startMonth === isSemesterExists.startMonth &&
+    payload.endMonth === isSemesterExists.endMonth
+  ) {
+    throw new AppError(
+      httpStatus.NOT_ACCEPTABLE,
+      'Make some changes to update !',
+    );
+  }
+
   // checking for duplicate semester
   const isDuplicateSemester = await AcademicSemesterModel.findOne({
     year: payload.year,

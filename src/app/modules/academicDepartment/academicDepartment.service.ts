@@ -42,13 +42,25 @@ const updateAcademicDepartmentIntoDB = async (
     throw new AppError(httpStatus.NOT_FOUND, 'This department does not exist!');
   }
 
+  // checking for same update
+  if (
+    payload.name === isDepartmentExist.name &&
+    payload.academicFaculty?.toString() ===
+      isDepartmentExist.academicFaculty.toString()
+  ) {
+    throw new AppError(
+      httpStatus.NOT_ACCEPTABLE,
+      'Make some changes to update !',
+    );
+  }
+
   // checking for duplicate semester
-  const isDuplicateFaculty = await AcademicDepartmentModel.findOne({
+  const isDuplicateDepartment = await AcademicDepartmentModel.findOne({
     name: payload.name,
     _id: { $ne: id },
   });
 
-  if (isDuplicateFaculty) {
+  if (isDuplicateDepartment) {
     throw new AppError(
       httpStatus.NOT_ACCEPTABLE,
       'Department already exists !',
