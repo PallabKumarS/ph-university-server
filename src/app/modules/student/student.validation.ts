@@ -8,8 +8,14 @@ const userNameValidationSchema = z.object({
     .refine((value) => /^[A-Z]/.test(value), {
       message: 'First Name must start with a capital letter',
     }),
-  middleName: z.string(),
-  lastName: z.string(),
+  middleName: z.string().optional(),
+  lastName: z
+    .string()
+    .min(1)
+    .max(20)
+    .refine((value) => /^[A-Z]/.test(value), {
+      message: 'Last Name must start with a capital letter',
+    }),
 });
 
 const guardianValidationSchema = z.object({
@@ -22,10 +28,10 @@ const guardianValidationSchema = z.object({
 });
 
 const localGuardianValidationSchema = z.object({
-  name: z.string(),
-  occupation: z.string(),
-  contactNo: z.string(),
-  address: z.string(),
+  name: z.string().optional(),
+  occupation: z.string().optional(),
+  contactNo: z.string().optional(),
+  address: z.string().optional(),
 });
 
 const createStudentValidationSchema = z.object({
@@ -37,15 +43,15 @@ const createStudentValidationSchema = z.object({
       dateOfBirth: z.string().optional(),
       email: z.string().email(),
       contactNo: z.string(),
-      emergencyContactNo: z.string(),
+      emergencyContactNo: z.string().optional(),
       bloodGroup: z.enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']),
       presentAddress: z.string(),
-      permanentAddress: z.string(),
+      permanentAddress: z.string().optional(),
       guardian: guardianValidationSchema,
       localGuardian: localGuardianValidationSchema,
       academicSemester: z.string(),
-      academicDepartment: z.string().optional(),
-      profileImg: z.string(),
+      academicDepartment: z.string(),
+      profileImg: z.string().optional(),
     }),
   }),
 });

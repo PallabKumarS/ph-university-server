@@ -7,8 +7,9 @@ import { UserServices } from './user.service';
 const createStudent = catchAsync(async (req, res) => {
   const { password, studentData } = req.body;
 
+
   const result = await UserServices.createStudentIntoDB(
-    // req.file,
+    req.file,
     password,
     studentData,
   );
@@ -26,7 +27,7 @@ const createTeacher = catchAsync(async (req, res) => {
   const { password, teacherData } = req.body;
 
   const result = await UserServices.createTeacherIntoDB(
-    // req.file,
+    req.file,
     password,
     teacherData,
   );
@@ -44,7 +45,7 @@ const createAdmin = catchAsync(async (req, res) => {
   const { password, adminData } = req.body;
 
   const result = await UserServices.createAdminIntoDB(
-    // req.file,
+    req.file,
     password,
     adminData,
   );
@@ -57,7 +58,7 @@ const createAdmin = catchAsync(async (req, res) => {
   });
 });
 
-// gen personal details
+// get personal details
 const getMe = catchAsync(async (req, res) => {
   const { userId, role } = req.user;
 

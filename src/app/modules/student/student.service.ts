@@ -10,7 +10,20 @@ import { studentSearchableFields } from './student.constant';
 // get all student from db
 const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
   // finding students from database
-  const studentQuery = new QueryBuilder(StudentModel.find(), query)
+
+  const studentQuery = new QueryBuilder(
+    StudentModel.find()
+      .populate('user')
+      .populate('academicSemester')
+      .populate('academicDepartment')
+      .populate({
+        path: 'academicDepartment',
+        populate: {
+          path: 'academicFaculty',
+        },
+      }),
+    query,
+  )
     .search(studentSearchableFields)
     .filter()
     .sort()

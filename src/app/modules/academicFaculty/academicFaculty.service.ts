@@ -40,13 +40,6 @@ const updateAcademicFacultyIntoDB = async (
     throw new AppError(httpStatus.NOT_FOUND, 'Academic Faculty does not exist');
   }
 
-  // checking for same update
-  if (payload.name === isFacultyExists.name) {
-    throw new AppError(
-      httpStatus.NOT_ACCEPTABLE,
-      'Make some changes to update !',
-    );
-  }
 
   // checking for duplicate semester
   const isDuplicateFaculty = await AcademicFacultyModel.findOne({

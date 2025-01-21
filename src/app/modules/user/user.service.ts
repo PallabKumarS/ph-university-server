@@ -18,14 +18,16 @@ import { AcademicDepartmentModel } from '../academicDepartment/academicDepartmen
 import { TeacherModel } from '../Teacher/teacher.model';
 import { TAdmin } from '../Admin/admin.interface';
 import { AdminModel } from '../Admin/admin.model';
-// import { sendImageToCloudinary } from '../../utils/sendImageToCloudinary';
+import { sendImageToCloudinary } from '../../utils/sendImageToCloudinary';
 
 // creating student into db
 const createStudentIntoDB = async (
-  // file: any,
+  file: any,
   password: string,
   payload: Partial<TStudent>,
 ) => {
+
+
   // create a user object
   const userData: Partial<TUser> = {};
 
@@ -56,10 +58,10 @@ const createStudentIntoDB = async (
     const newUser = await UserModel.create([userData], { session });
 
     //send image to cloudinary
-    // const imageName = `${userData.id}${payload?.name?.firstName}`;
-    // const path = file?.path;
-    // const result = await sendImageToCloudinary(imageName, path);
-    // const secure_url = (result as { secure_url: string }).secure_url;
+    const imageName = `${userData.id}${payload?.name?.firstName}`;
+    const path = file?.path;
+    const result = await sendImageToCloudinary(imageName, path);
+    const secure_url = (result as { secure_url: string }).secure_url;
 
     // create a student
     if (!newUser.length) {
@@ -69,7 +71,7 @@ const createStudentIntoDB = async (
     // set id, _id as user
     payload.id = newUser[0]?.id;
     payload.user = newUser[0]?._id; // reference _id
-    // payload.profileImg = secure_url;
+    payload.profileImg = secure_url;
 
     // create a student (second transaction)
     const newStudent = await StudentModel.create([payload], { session });
@@ -91,7 +93,7 @@ const createStudentIntoDB = async (
 
 // create teacher into db
 const createTeacherIntoDB = async (
-  // file: any,
+  file: any,
   password: string,
   payload: Partial<TTeacher>,
 ) => {
@@ -125,10 +127,10 @@ const createTeacherIntoDB = async (
     const newUser = await UserModel.create([userData], { session });
 
     //send image to cloudinary
-    // const imageName = `${userData.id}${payload?.name?.firstName}`;
-    // const path = file?.path;
-    // const result = await sendImageToCloudinary(imageName, path);
-    // const secure_url = (result as { secure_url: string }).secure_url;
+    const imageName = `${userData.id}${payload?.name?.firstName}`;
+    const path = file?.path;
+    const result = await sendImageToCloudinary(imageName, path);
+    const secure_url = (result as { secure_url: string }).secure_url;
 
     // create a student
     if (!newUser.length) {
@@ -138,7 +140,7 @@ const createTeacherIntoDB = async (
     // set id, _id as user
     payload.id = newUser[0]?.id;
     payload.user = newUser[0]?._id; // reference _id
-    // payload.profileImg = secure_url;
+    payload.profileImg = secure_url;
 
     // create a student (second transaction)
     const newTeacher = await TeacherModel.create([payload], { session });
@@ -160,9 +162,9 @@ const createTeacherIntoDB = async (
 
 // create admin into db
 const createAdminIntoDB = async (
+  file: any,
   password: string,
   payload: Partial<TAdmin>,
-  // file: any,
 ) => {
   // create a user object
   const userData: Partial<TUser> = {};
@@ -185,10 +187,10 @@ const createAdminIntoDB = async (
     const newUser = await UserModel.create([userData], { session });
 
     //send image to cloudinary
-    // const imageName = `${userData.id}${payload?.name?.firstName}`;
-    // const path = file?.path;
-    // const result = await sendImageToCloudinary(imageName, path);
-    // const secure_url = (result as { secure_url: string }).secure_url;
+    const imageName = `${userData.id}${payload?.name?.firstName}`;
+    const path = file?.path;
+    const result = await sendImageToCloudinary(imageName, path);
+    const secure_url = (result as { secure_url: string }).secure_url;
 
     // create a student
     if (!newUser.length) {
@@ -198,7 +200,7 @@ const createAdminIntoDB = async (
     // set id, _id as user
     payload.id = newUser[0]?.id;
     payload.user = newUser[0]?._id; // reference _id
-    // payload.profileImg = secure_url;
+    payload.profileImg = secure_url;
 
     // create a admin (second transaction)
     const newAdmin = await AdminModel.create([payload], { session });
