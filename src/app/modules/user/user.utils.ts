@@ -34,7 +34,7 @@ export const generateStudentId = async (payload: TAcademicSemester) => {
         id: 1,
         _id: 0,
       },
-    ).lean();
+    );
 
     return lastUser;
   };
@@ -49,18 +49,25 @@ export const generateStudentId = async (payload: TAcademicSemester) => {
   if (lastStudentYear === payload?.year && lastStudentCode === payload?.code) {
     currentId = lastStudentId?.substring(6) || '0000';
   }
-  //increment by 1
-  const incrementId = (Number(currentId) + 1).toString().padStart(4, '0');
 
-  let finalId = `${payload.year}${payload.code}${incrementId}`;
+  let uniqueIdFound = false;
+  let finalId = '';
 
-  let lastUser = await existingId(finalId);
+  while (!uniqueIdFound) {
+    // Increment the ID
+    const incrementId = (Number(currentId) + 1).toString().padStart(4, '0');
+    finalId = `${payload.year}${payload.code}${incrementId}`;
 
-  if (lastUser) {
-    const nextId = Number(lastUser?.id) + 1;
-    lastUser = await existingId(nextId.toString());
-    finalId = `${lastUser?.id}`;
-    return lastUser?.id;
+    // Check if the ID exists
+    const lastUser = await existingId(finalId);
+
+    if (!lastUser) {
+      // If the ID does not exist, it is unique
+      uniqueIdFound = true;
+    } else {
+      // Otherwise, continue to the next ID
+      currentId = incrementId;
+    }
   }
   return finalId;
 };

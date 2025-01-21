@@ -41,6 +41,7 @@ export type TStudent = {
   academicSemester: Types.ObjectId;
   academicDepartment: Types.ObjectId;
   isDeleted: boolean;
+  isBlocked: boolean;
 };
 
 //for creating static

@@ -33,13 +33,11 @@ export const sendImageToCloudinary = (imageName: string, path: string) => {
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const uploadPath = process.cwd() + '/uploads/';
-    console.log(uploadPath);
     cb(null, uploadPath);
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
     const filename = file.fieldname + '-' + uniqueSuffix;
-    console.log('File name:', filename);
     cb(null, filename);
   },
 });
@@ -47,7 +45,6 @@ const storage = multer.diskStorage({
 export const upload = multer({
   storage: storage,
   fileFilter: function (req, file, cb) {
-    console.log('File received:', file);
     cb(null, true); // Accept file
   },
 });

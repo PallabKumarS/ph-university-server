@@ -75,16 +75,7 @@ const deleteStudentFromDB = async (id: string) => {
       { id: deletedStudent.id },
       { isDeleted: true },
       { new: true, session },
-    )
-      .populate('academicSemester')
-      .populate('user')
-      .populate('academicDepartment')
-      .populate({
-        path: 'academicDepartment',
-        populate: {
-          path: 'academicFaculty',
-        },
-      });
+    );
 
     if (!deletedUser) {
       throw new AppError(httpStatus.BAD_REQUEST, 'Failed to delete student');
@@ -147,9 +138,28 @@ const updateStudentIntoDB = async (id: string, payload: Partial<TStudent>) => {
   return updatedStudent;
 };
 
+// update status only
+const statusChangeIntoDB = async (id: string, status: boolean) => {
+  const updatedStudent = await StudentModel.findOneAndUpdate(
+    { _id: id },
+    { isBlocked: status },
+    {
+      new: true,
+      runValidators: true,
+    },
+  )
+    .populate('academicSemester')
+    .populate('user')
+    .populate('academicDepartment');
+
+  return updatedStudent;
+
+};
+
 export const StudentServices = {
   getAllStudentsFromDB,
   getSingleStudentFromDB,
   deleteStudentFromDB,
   updateStudentIntoDB,
+  statusChangeIntoDB,
 };

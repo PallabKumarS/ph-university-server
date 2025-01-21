@@ -148,6 +148,10 @@ const studentSchema = new Schema<TStudent, IStudent>(
       type: Boolean,
       default: false,
     },
+    isBlocked: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     toJSON: {

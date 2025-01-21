@@ -28,4 +28,10 @@ router.patch(
 
 router.get('/', auth(USER_ROLE.admin), StudentControllers.getAllStudents);
 
+router.patch(
+  '/change-status/:studentId',
+  auth(USER_ROLE.admin),
+  StudentControllers.statusChange,
+);
+
 export const StudentRoutes = router;
