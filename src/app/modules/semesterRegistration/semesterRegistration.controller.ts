@@ -4,6 +4,7 @@ import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { SemesterRegistrationService } from './semesterRegistration.service';
 
+// create semester registration controller
 const createSemesterRegistration = catchAsync(
   async (req: Request, res: Response) => {
     const result =
@@ -20,6 +21,7 @@ const createSemesterRegistration = catchAsync(
   },
 );
 
+// get all semester registration controller
 const getAllSemesterRegistrations = catchAsync(
   async (req: Request, res: Response) => {
     const result =
@@ -36,6 +38,7 @@ const getAllSemesterRegistrations = catchAsync(
   },
 );
 
+// get single semester registration controller
 const getSingleSemesterRegistration = catchAsync(
   async (req: Request, res: Response) => {
     const { id } = req.params;
@@ -54,6 +57,7 @@ const getSingleSemesterRegistration = catchAsync(
   },
 );
 
+// update semester registration controller
 const updateSemesterRegistration = catchAsync(
   async (req: Request, res: Response) => {
     const { id } = req.params;
@@ -72,6 +76,7 @@ const updateSemesterRegistration = catchAsync(
   },
 );
 
+// delete semester registration controller
 const deleteSemesterRegistration = catchAsync(
   async (req: Request, res: Response) => {
     const { id } = req.params;
@@ -81,7 +86,7 @@ const deleteSemesterRegistration = catchAsync(
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'Semester Registration is updated successfully',
+      message: 'Semester Registration is deleted successfully',
       data: result,
     });
   },
