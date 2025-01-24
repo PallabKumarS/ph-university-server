@@ -9,6 +9,7 @@ import { AppError } from '../../errors/AppError';
 import { AcademicSemesterModel } from '../academicSemester/academicSemester.model';
 import { OfferedCourseModel } from '../OfferedCourse/OfferedCourse.model';
 
+// create semester registration into db
 const createSemesterRegistrationIntoDB = async (
   payload: TSemesterRegistration,
 ) => {
@@ -56,6 +57,7 @@ const createSemesterRegistrationIntoDB = async (
   return result;
 };
 
+// get all semester registration from db
 const getAllSemesterRegistrationsFromDB = async (
   query: Record<string, unknown>,
 ) => {
@@ -72,17 +74,18 @@ const getAllSemesterRegistrationsFromDB = async (
   return result;
 };
 
+// get single semester registration from db
 const getSingleSemesterRegistrationsFromDB = async (id: string) => {
   const result = await SemesterRegistrationModel.findById(id);
 
   return result;
 };
 
+// update semester registration into db
 const updateSemesterRegistrationIntoDB = async (
   id: string,
   payload: Partial<TSemesterRegistration>,
 ) => {
-  // check if the requested registered semester is exists
   // check if the semester is already registered!
   const isSemesterRegistrationExists =
     await SemesterRegistrationModel.findById(id);
@@ -138,7 +141,7 @@ const updateSemesterRegistrationIntoDB = async (
 const deleteSemesterRegistrationFromDB = async (id: string) => {
   /** 
   * Step1: Delete associated offered courses.
-  * Step2: Delete semester registraton when the status is 
+  * Step2: Delete semester registration when the status is 
   'UPCOMING'.
   **/
 
