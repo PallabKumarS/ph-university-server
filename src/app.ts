@@ -17,7 +17,10 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(
   cors({
-    origin: [config.local_client as string, config.client as string],
+    origin: [
+      (config.local_client as string) || 'http://localhost:5173',
+      (config.client as string) || 'https://pks-university.vercel.app',
+    ],
     credentials: true,
   }),
 );
@@ -25,11 +28,9 @@ app.use(
 // application routes
 app.use('/api/v1', router);
 
-const test = (req: Request, res: Response) => {
-  res.send('Server is running');
-};
-
-app.get('/api/v1', test);
+app.get('/', (req: Request, res: Response) => {
+  res.send('P University Server is running');
+});
 
 app.use(globalErrorHandler);
 

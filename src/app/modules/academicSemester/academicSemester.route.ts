@@ -3,13 +3,13 @@ import validateRequest from '../../middlewares/validateRequest';
 import { AcademicSemesterControllers } from './academicSemester.controller';
 import { AcademicSemesterValidations } from './academicSemester.validation';
 import auth from '../../middlewares/auth';
-import { USER_ROLE } from '../user/user.constant';
+import { USER_ROLE } from '../User/user.constant';
 
 const router = express.Router();
 
 router.post(
   '/create-academic-semester',
-  auth(USER_ROLE.admin),
+  auth(USER_ROLE.admin, USER_ROLE.superAdmin),
   validateRequest(
     AcademicSemesterValidations.createAcademicSemesterValidationSchema,
   ),
@@ -18,13 +18,18 @@ router.post(
 
 router.get(
   '/:semesterId',
-  auth(USER_ROLE.admin, USER_ROLE.student, USER_ROLE.teacher),
+  auth(
+    USER_ROLE.admin,
+    USER_ROLE.superAdmin,
+    USER_ROLE.student,
+    USER_ROLE.teacher,
+  ),
   AcademicSemesterControllers.getSingleAcademicSemester,
 );
 
 router.patch(
   '/:semesterId',
-  auth(USER_ROLE.admin),
+  auth(USER_ROLE.admin, USER_ROLE.superAdmin),
   validateRequest(
     AcademicSemesterValidations.updateAcademicSemesterValidationSchema,
   ),
@@ -33,13 +38,18 @@ router.patch(
 
 router.delete(
   '/:semesterId',
-  auth(USER_ROLE.admin),
+  auth(USER_ROLE.admin, USER_ROLE.superAdmin),
   AcademicSemesterControllers.deleteAcademicSemester,
 );
 
 router.get(
   '/',
-  auth(USER_ROLE.admin, USER_ROLE.student, USER_ROLE.teacher),
+  auth(
+    USER_ROLE.admin,
+    USER_ROLE.superAdmin,
+    USER_ROLE.student,
+    USER_ROLE.teacher,
+  ),
   AcademicSemesterControllers.getAllAcademicSemesters,
 );
 

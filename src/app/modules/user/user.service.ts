@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import config from '../../config';
 import { TStudent } from '../student/student.interface';
 import { StudentModel } from '../student/student.model';
-import { AcademicSemesterModel } from './../academicSemester/academicSemester.model';
+import { AcademicSemesterModel } from '../academicSemester/academicSemester.model';
 import { TUser } from './user.interface';
 import { UserModel } from './user.model';
 import {
@@ -26,8 +26,6 @@ const createStudentIntoDB = async (
   password: string,
   payload: Partial<TStudent>,
 ) => {
-
-
   // create a user object
   const userData: Partial<TUser> = {};
 

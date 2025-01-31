@@ -17,7 +17,7 @@ const handleValidationError = (
 
   return {
     statusCode,
-    message: 'Validation Error',
+    message: errorSources.map((error) => error.message).join(', '),
     errorSources,
   };
 };

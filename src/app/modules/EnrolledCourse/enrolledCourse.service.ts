@@ -195,14 +195,14 @@ const updateEnrolledCourseMarksIntoDB = async (
     throw new AppError(httpStatus.NOT_FOUND, 'Teacher not found !');
   }
 
-  const isCourseBelongToFaculty = await EnrolledCourse.findOne({
+  const isCourseBelongToTeacher = await EnrolledCourse.findOne({
     semesterRegistration,
     offeredCourse,
     student,
     teacher: teacher._id,
   });
 
-  if (!isCourseBelongToFaculty) {
+  if (!isCourseBelongToTeacher) {
     throw new AppError(httpStatus.FORBIDDEN, 'You are forbidden! !');
   }
 
@@ -212,13 +212,9 @@ const updateEnrolledCourseMarksIntoDB = async (
 
   if (courseMarks?.finalTerm) {
     const { classTest1, classTest2, midTerm, finalTerm } =
-      isCourseBelongToFaculty.courseMarks;
+      isCourseBelongToTeacher.courseMarks;
 
-    const totalMarks =
-      Math.ceil(classTest1 * 0.1) +
-      Math.ceil(midTerm * 0.3) +
-      Math.ceil(classTest2 * 0.1) +
-      Math.ceil(finalTerm * 0.5);
+    const totalMarks = classTest1 + classTest2 + midTerm + finalTerm;
 
     const result = calculateGradeAndPoints(totalMarks);
 
@@ -234,7 +230,7 @@ const updateEnrolledCourseMarksIntoDB = async (
   }
 
   const result = await EnrolledCourse.findByIdAndUpdate(
-    isCourseBelongToFaculty._id,
+    isCourseBelongToTeacher._id,
     modifiedData,
     {
       new: true,

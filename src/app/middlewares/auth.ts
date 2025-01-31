@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
 import httpStatus from 'http-status';
 import config from '../config';
-import { TUserRole } from '../modules/user/user.interface';
+import { TUserRole } from '../modules/User/user.interface';
 import catchAsync from '../utils/catchAsync';
 import { AppError } from '../errors/AppError';
-import { UserModel } from '../modules/user/user.model';
+import { UserModel } from '../modules/User/user.model';
 import { verifyToken } from '../modules/Auth/auth.utils';
 import { JwtPayload } from 'jsonwebtoken';
 

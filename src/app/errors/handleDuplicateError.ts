@@ -19,7 +19,7 @@ const handleDuplicateError = (err: any): TGenericErrorResponse => {
 
   return {
     statusCode,
-    message: 'Duplicate field value',
+    message: `${extractedMessage} already exists`,
     errorSources,
   };
 };

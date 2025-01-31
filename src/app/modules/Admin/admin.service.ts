@@ -6,7 +6,7 @@ import { AdminSearchableFields } from './admin.constant';
 import { TAdmin } from './admin.interface';
 import { AdminModel } from './admin.model';
 import { AppError } from '../../errors/AppError';
-import { UserModel } from '../user/user.model';
+import { UserModel } from '../User/user.model';
 
 const getAllAdminsFromDB = async (query: Record<string, unknown>) => {
   const adminQuery = new QueryBuilder(AdminModel.find(), query)

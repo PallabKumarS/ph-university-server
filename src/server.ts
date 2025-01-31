@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import app from './app';
 import config from './app/config';
 import { Server } from 'http';
+import seedSuperAdmin from './app/DB';
 
 let server: Server;
 
@@ -20,6 +21,7 @@ async function main() {
   } catch (err) {
     console.log(err);
   }
+  await seedSuperAdmin();
 }
 main();
 

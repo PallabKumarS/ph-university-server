@@ -3,7 +3,7 @@ import auth from '../../middlewares/auth';
 import validateRequest from '../../middlewares/validateRequest';
 import { AuthControllers } from './auth.controller';
 import { AuthValidation } from './auth.validation';
-import { USER_ROLE } from '../user/user.constant';
+import { USER_ROLE } from '../User/user.constant';
 
 const router = express.Router();
 
@@ -15,7 +15,12 @@ router.post(
 
 router.post(
   '/change-password',
-  auth(USER_ROLE.admin, USER_ROLE.teacher, USER_ROLE.student),
+  auth(
+    USER_ROLE.admin,
+    USER_ROLE.superAdmin,
+    USER_ROLE.teacher,
+    USER_ROLE.student,
+  ),
   validateRequest(AuthValidation.changePasswordValidationSchema),
   AuthControllers.changePassword,
 );

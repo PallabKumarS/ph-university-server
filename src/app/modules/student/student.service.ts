@@ -1,7 +1,7 @@
 import httpStatus from 'http-status';
 import { StudentModel } from './student.model';
 import mongoose from 'mongoose';
-import { UserModel } from '../user/user.model';
+import { UserModel } from '../User/user.model';
 import { TStudent } from './student.interface';
 import { AppError } from '../../errors/AppError';
 import QueryBuilder from '../../builder/QueryBuilder';
@@ -153,7 +153,6 @@ const statusChangeIntoDB = async (id: string, status: boolean) => {
     .populate('academicDepartment');
 
   return updatedStudent;
-
 };
 
 export const StudentServices = {

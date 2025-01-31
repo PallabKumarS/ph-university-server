@@ -6,7 +6,7 @@ import { TeacherSearchableFields } from './teacher.constant';
 import { TeacherModel } from './teacher.model';
 import { TTeacher } from './teacher.interface';
 import { AppError } from '../../errors/AppError';
-import { UserModel } from '../user/user.model';
+import { UserModel } from '../User/user.model';
 
 const getAllTeachersFromDB = async (query: Record<string, unknown>) => {
   const TeacherQuery = new QueryBuilder(
